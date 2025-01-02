@@ -1,32 +1,15 @@
 def deff(number):
     l = {
         3: "hundred",
-        4: "thousand"
+        4: "thousand",
+        5: "million"
     }
     return l.get(len(number), 1)
 
 def numIsSingle(number):
     num = int(number)
-    if num == 0:
-        return "zero"
-    elif num == 1:
-        return "one"
-    elif num == 2:
-        return "two"
-    elif num == 3:
-        return "three"
-    elif num == 4:
-        return "four"
-    elif num == 5:
-        return "five"
-    elif num == 6:
-        return "six"
-    elif num == 7:
-        return "seven"
-    elif num == 8:
-        return "eight"
-    elif num == 9:
-        return "nine"
+    l = {0: "zero", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
+    return l.get(num)
 
 def tyies(num):
     if len(num) == 2:
@@ -47,11 +30,19 @@ def outputFn(num, first):
     if len(num) < 1:
         return
     
+    if len(num) == 1:
+        number = numIsSingle(num)
+        print(number, end='')
+        return
+    
     if first is False:
+        if(int(num) == 0):
+            return
         print("and", end=' ')
     
     while num[0] == '0' and len(num) > 1:
         num = num[1:]
+    
 
     twies = tyies(num)
     if twies != -1:
