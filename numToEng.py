@@ -1,10 +1,13 @@
 def deff(number):
-    l = {
-        3: "hundred",
-        4: "thousand",
-        5: "million"
-    }
-    return l.get(len(number), 1)
+    if len(number) == 3:
+        return "hundred"
+    elif len(number) >= 4 and len(number) <= 6:
+        return "thousand"
+    elif len(number) >= 7 and len(number) <= 9:
+        return "million"
+    elif len(number) >= 10 and len(number) <= 12:
+        return "billion"
+    return 1
 
 def numIsSingle(number):
     num = int(number)
@@ -19,48 +22,69 @@ def tyies(num):
             return l.get(int(num[1]), -1)
 
         h = {2: "twenty", 3: "thirty", 4: "fourty", 5: "fifty", 6: "sixty", 7: "seventy", 8: "eighty", 9: "ninety"}
+        start = h.get(int(num[0]), -1)
+        if start == -1:
+            return -1
+
         if num[1] == '0':
-            return h.get(int(num[0]), -1)
+            return start
         else:
-            return h.get(int(num[0]), -1) + ' ' + numIsSingle(num[1])
+            return start + ' ' + numIsSingle(num[1])
     
     return -1
 
-def outputFn(num, first):
+def outputFn(num, my_list):
     if len(num) < 1:
         return
     
     if len(num) == 1:
         number = numIsSingle(num)
-        print(number, end='')
+        my_list.append(number)
         return
     
-    if first is False:
-        if(int(num) == 0):
-            return
-        print("and", end=' ')
+    if int(num) == 0:
+        return
     
     while num[0] == '0' and len(num) > 1:
         num = num[1:]
     
-
     twies = tyies(num)
     if twies != -1:
-        print(twies, end=' ')
+        my_list.append("and")
+        my_list.append(twies)
         return
 
-    initial = numIsSingle(num[0])
+    flag = 1
+    if len(num) == 5 or len(num) == 8 or len(num) == 11:
+        string = num[:2]
+        initial = tyies(string)
+        flag = 2
+    elif len(num) == 6 or len(num) == 9 or len(num) == 12:
+        initial = outputFn(num[:3], my_list)
+        flag = 3
+    else:
+        initial = numIsSingle(num[0])
+
     call = deff(num)
     if call == 1:
         call = ''
+        my_list.append("and")
 
-    print(str(initial) + ' ' + str(call), end=' ')
+    if initial is not None:
+        my_list.append(str(initial))
+    my_list.append(str(call))
 
-    outputFn(num[1:], False)
+    outputFn(num[flag:], my_list)
 
 
 num = input("enter number: ")
-outputFn(num, True)
-print()
+my_list = []
+outputFn(num, my_list)
+
+string = ""
+for item in my_list:
+    string += item + ' '
+
+print(string)
 
 
